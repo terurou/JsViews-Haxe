@@ -4,6 +4,8 @@
  */
 package js.jsviews;
 
+import js.html.Element;
+
 @:native("$")
 extern class JsViews {
     @:overload(function (name: String, markupOrSelector: String): Template{})
@@ -11,15 +13,33 @@ extern class JsViews {
     @:overload(function (namedTemplates: {}, ?parentTemplate: String): JsViews{})
     static function templates(markupOrSelector: String): Template;
 
-    static var render(default, never): Dynamic <{} -> String>;
+    static var render(default, never): Dynamic<{} -> String>;
 
     static var views: {
-        function converters(name: String, fn: Dynamic -> String): Dynamic -> String;
+        @:overload(function (namedConverters: {}, ?parentTemplate: String): Dynamic{})
+        function converters(name: String, fn: Dynamic -> String): Dynamic;
 
-        function tags(name: String, fn: Dynamic -> String): Dynamic -> String;
+        @:overload(function (namedTags: {}, ?parentTemplate: String): Dynamic{})
+        function tags(name: String, fn: Dynamic -> String): Dynamic;
 
-        function helpers(name: String, fn: Dynamic -> String): Dynamic -> String;
+        @:overload(function (namedHelpers: {}, ?parentTemplate: String): Dynamic{})
+        function helpers(name: String, fn: Dynamic -> String): Dynamic;
     };
+
+    @:overload(function (flag: Bool, to: Element, from: {}, ?context: {}): Dynamic{})
+    //@:overload(function (flag: Bool, to: JQuery, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (template: Template, to: String, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (template: Template, to: Element, from: {}, ?context: {}): Dynamic{})
+    //@:overload(function (template: Template, to: JQuery, from: {}, ?context: {}): Dynamic{})
+    static function link(flag: Bool, to: String, from: {}, ?context: {}): Dynamic; //JQuery
+
+    @:overload(function (flag: Bool, to: Element): Void{})
+    //@:overload(function (flag: Bool, to: JQuery): Void{})
+    @:overload(function (template: Template, to: String): Void{})
+    @:overload(function (template: Template, to: Element): Void{})
+    //@:overload(function (template: Template, to: JQuery): Void{})
+    @:overload(function (): Void{})
+    static function unlink(flag: Bool, to: String) : Void;
 
     @:overload(function (object: {}): ObjectObservable{})
     static function observable(array: Array<Dynamic>) : ArrayObservable;
@@ -33,11 +53,6 @@ extern class JsViews {
     static function unobserve(array: Array<Dynamic>, myHandler: ObservableEvent -> ObservableEventArgs -> Void): {};
 }
 
-
-typedef Template = {
-    function render(?data: {}, ?helpersOrContext: Dynamic): String;
-}
-
 typedef TemplateOptions = {
     markup: String,
     ?converters: { },
@@ -45,12 +60,29 @@ typedef TemplateOptions = {
     ?tags: { }
 }
 
-typedef TagCtx = {>Template,
+
+typedef Template = {
+    var markup(default, never): String;
+
+    function render(?data: {}, ?helpersOrContext: Dynamic): String;
+
+    @:overload(function (to: Element, from: {}, ?context: {}): Dynamic{})
+    //@:overload(function (to: JQuery, from: {}, ?context: {}): Dynamic{})
+    function link(to: String, from: {}, ?context: {}): Dynamic;
+
+    @:overload(function (to: Element): Void{})
+    //@:overload(function (to: JQuery): Void{})
+    function unlink(to: String): Void;
+}
+
+typedef TagCtx = {
+    var markup(default, never): String;
     var args(default, never): Array<Dynamic>;
     var params(default, never): String;
     var props(default, never): Dynamic;
     var content(default, never): Template;
     var views(default, never): Dynamic;
+    function render(?data: {}, ?helpersOrContext: Dynamic): String;
 }
 
 typedef ConverterCtx = {
@@ -82,22 +114,21 @@ typedef ArrayObservable = {>Observable,
 
 
 typedef ObservableEvent = {
-    target: {}, // Object or Array<Dynamic>
-    data: {}    // JsViews metadata
+    var target(default, never): { }; // Object or Array<Dynamic>
+    var data(default, never): { };   // JsViews metadata
 }
 
 typedef ObservableEventArgs = {
-    change: ObservableEventType,
+    var change(default, never): ObservableEventType;
 
-    ?path: String,      // object / set
-    ?value: Dynamic,    // object / set
-    ?oldValue: Dynamic, // object / set
-
-    ?index: Int,             // array / insert, remove, move
-    ?items: Array<Dynamic>,  // array / insert, move
-    ?numToRemove: Int,       // array / remove
-    ?oldIndex: Int,          // array / move
-    ?oldItem: Dynamic        // array / refresh
+    var path(default, never): Null<String>;      // object / set
+    var value(default, never): Null<Dynamic>;    // object / set
+    var oldValue(default, never): Null<Dynamic>; // object / set
+    var index(default, never): Null<Int>;             // array / insert, remove, move
+    var items(default, never): Null<Array<Dynamic>>;  // array / insert, move
+    var numToRemove(default, never): Null<Int>;       // array / remove
+    var oldIndex(default, never): Null<Int>;          // array / move
+    var oldItem(default, never): Null<Dynamic>;       // array / refresh
 }
 
 // FIXME Rewrites with @:enum abstract (>= Haxe 3.2)
