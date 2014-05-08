@@ -16,33 +16,34 @@ extern class JsViews {
     static var render(default, never): Dynamic<{} -> String>;
 
     static var views: {
-        @:overload(function (namedConverters: {}, ?parentTemplate: String): Dynamic{})
-        function converters(name: String, fn: Dynamic -> String): Dynamic;
+        @:overload(function (namedConverters: {}, ?parentTemplate: String): Void{})
+        function converters(name: String, fn: Dynamic -> String): Void;
 
-        @:overload(function (namedTags: {}, ?parentTemplate: String): Dynamic{})
-        function tags(name: String, fn: Dynamic -> String): Dynamic;
+        @:overload(function (namedTags: {}, ?parentTemplate: String): Void{})
+        function tags(name: String, fn: Dynamic -> String): Void;
 
-        @:overload(function (namedHelpers: {}, ?parentTemplate: String): Dynamic{})
-        function helpers(name: String, fn: Dynamic -> String): Dynamic;
+        @:overload(function (namedHelpers: {}, ?parentTemplate: String): Void{})
+        function helpers(name: String, fn: Dynamic -> String): Void;
     };
 
     @:overload(function (markupOrSelector: String): Template{})
-    @:overload(function (?name: String, templateOptions: TemplateOptions): Template{})
+    @:overload(function (templateOptions: TemplateOptions): Template{})
+    @:overload(function (name: String, templateOptions: TemplateOptions): Template{})
     @:overload(function (namedTemplates: {}, ?parentTemplate: String): Void{})
     static inline function template(name: String, markupOrSelector: String): Template {
-        return untyped __js__("$")(name, markupOrSelector);
+        return untyped __js__("$.templates")(name, markupOrSelector);
     }
 
-    @:overload(function (flag: Bool, to: Element, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (flag: Bool, to: Element, from: {}, ?context: {}): Void{})
     #if jsviews_enable_jqhx
-    @:overload(function (flag: Bool, to: JqHtml, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (flag: Bool, to: JqHtml, from: {}, ?context: {}): Void{})
     #end
-    @:overload(function (template: Template, to: String, from: {}, ?context: {}): Dynamic{})
-    @:overload(function (template: Template, to: Element, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (template: Template, to: String, from: {}, ?context: {}): Void{})
+    @:overload(function (template: Template, to: Element, from: {}, ?context: {}): Void{})
     #if jsviews_enable_jqhx
-    @:overload(function (template: Template, to: JqHtml, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (template: Template, to: JqHtml, from: {}, ?context: {}): Void{})
     #end
-    static function link(flag: Bool, to: String, from: {}, ?context: {}): #if jsviews_enable_jqhx JqHtml #else Dynamic #end;
+    static function link(flag: Bool, to: String, from: {}, ?context: {}): Void;
 
     @:overload(function (flag: Bool, to: Element): Void{})
     #if jsviews_enable_jqhx
@@ -81,11 +82,11 @@ typedef Template = {
 
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
 
-    @:overload(function (to: Element, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (to: Element, from: {}, ?context: {}): Void{})
     #if jsviews_enable_jqhx
-    @:overload(function (to: JqHtml, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (to: JqHtml, from: {}, ?context: {}): Void{})
     #end
-    function link(to: String, from: {}, ?context: {}): Dynamic;
+    function link(to: String, from: {}, ?context: {}): Void;
 
     @:overload(function (to: Element): Void{})
     #if jsviews_enable_jqhx
