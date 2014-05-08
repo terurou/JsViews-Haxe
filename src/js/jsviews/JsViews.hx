@@ -5,6 +5,9 @@
 package js.jsviews;
 
 import js.html.Element;
+#if jsviews_enable_jqhx
+import js.jqhx.JqHtml;
+#end
 
 @:native("$")
 extern class JsViews {
@@ -26,18 +29,26 @@ extern class JsViews {
         function helpers(name: String, fn: Dynamic -> String): Dynamic;
     };
 
-    @:overload(function (flag: Bool, to: Element, from: {}, ?context: {}): Dynamic{})
-    //@:overload(function (flag: Bool, to: JQuery, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (flag: Bool, to: Element, from: { }, ?context: { } ): Dynamic { } )
+    #if jsviews_enable_jqhx
+    @:overload(function (flag: Bool, to: JqHtml, from: {}, ?context: {}): Dynamic{})
+    #end
     @:overload(function (template: Template, to: String, from: {}, ?context: {}): Dynamic{})
     @:overload(function (template: Template, to: Element, from: {}, ?context: {}): Dynamic{})
-    //@:overload(function (template: Template, to: JQuery, from: {}, ?context: {}): Dynamic{})
-    static function link(flag: Bool, to: String, from: {}, ?context: {}): Dynamic; //JQuery
+    #if jsviews_enable_jqhx
+    @:overload(function (template: Template, to: JqHtml, from: {}, ?context: {}): Dynamic{})
+    #end
+    static function link(flag: Bool, to: String, from: {}, ?context: {}): #if jsviews_enable_jqhx JqHtml #else Dynamic #end;
 
     @:overload(function (flag: Bool, to: Element): Void{})
-    //@:overload(function (flag: Bool, to: JQuery): Void{})
+    #if jsviews_enable_jqhx
+    @:overload(function (flag: Bool, to: JqHtml): Void{})
+    #end
     @:overload(function (template: Template, to: String): Void{})
     @:overload(function (template: Template, to: Element): Void{})
-    //@:overload(function (template: Template, to: JQuery): Void{})
+    #if jsviews_enable_jqhx
+    @:overload(function (template: Template, to: JqHtml): Void { } )
+    #end
     @:overload(function (): Void{})
     static function unlink(flag: Bool, to: String) : Void;
 
@@ -66,12 +77,16 @@ typedef Template = {
 
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
 
-    @:overload(function (to: Element, from: {}, ?context: {}): Dynamic{})
-    //@:overload(function (to: JQuery, from: {}, ?context: {}): Dynamic{})
+    @:overload(function (to: Element, from: { }, ?context: { } ): Dynamic { } )
+    #if jsviews_enable_jqhx
+    @:overload(function (to: JqHtml, from: {}, ?context: {}): Dynamic{})
+    #end
     function link(to: String, from: {}, ?context: {}): Dynamic;
 
     @:overload(function (to: Element): Void{})
-    //@:overload(function (to: JQuery): Void{})
+    #if jsviews_enable_jqhx
+    @:overload(function (to: JqHtml): Void{})
+    #end
     function unlink(to: String): Void;
 }
 
