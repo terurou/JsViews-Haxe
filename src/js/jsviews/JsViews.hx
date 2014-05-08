@@ -11,10 +11,7 @@ import js.jqhx.JqHtml;
 
 @:native("$")
 extern class JsViews {
-    @:overload(function (name: String, markupOrSelector: String): Template{})
-    @:overload(function (?name: String, templateOptions: TemplateOptions): Template{})
-    @:overload(function (namedTemplates: {}, ?parentTemplate: String): JsViews{})
-    static function templates(markupOrSelector: String): Template;
+    static var templates(default, never): Dynamic<Template>;
 
     static var render(default, never): Dynamic<{} -> String>;
 
@@ -29,7 +26,14 @@ extern class JsViews {
         function helpers(name: String, fn: Dynamic -> String): Dynamic;
     };
 
-    @:overload(function (flag: Bool, to: Element, from: { }, ?context: { } ): Dynamic { } )
+    @:overload(function (markupOrSelector: String): Template{})
+    @:overload(function (?name: String, templateOptions: TemplateOptions): Template{})
+    @:overload(function (namedTemplates: {}, ?parentTemplate: String): Void{})
+    static inline function template(name: String, markupOrSelector: String): Template {
+        return untyped __js__("$")(name, markupOrSelector);
+    }
+
+    @:overload(function (flag: Bool, to: Element, from: {}, ?context: {}): Dynamic{})
     #if jsviews_enable_jqhx
     @:overload(function (flag: Bool, to: JqHtml, from: {}, ?context: {}): Dynamic{})
     #end
@@ -47,7 +51,7 @@ extern class JsViews {
     @:overload(function (template: Template, to: String): Void{})
     @:overload(function (template: Template, to: Element): Void{})
     #if jsviews_enable_jqhx
-    @:overload(function (template: Template, to: JqHtml): Void { } )
+    @:overload(function (template: Template, to: JqHtml): Void{})
     #end
     @:overload(function (): Void{})
     static function unlink(flag: Bool, to: String) : Void;
@@ -66,9 +70,9 @@ extern class JsViews {
 
 typedef TemplateOptions = {
     markup: String,
-    ?converters: { },
-    ?helpers: { },
-    ?tags: { }
+    ?converters: {},
+    ?helpers: {},
+    ?tags: {}
 }
 
 
@@ -77,7 +81,7 @@ typedef Template = {
 
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
 
-    @:overload(function (to: Element, from: { }, ?context: { } ): Dynamic { } )
+    @:overload(function (to: Element, from: {}, ?context: {}): Dynamic{})
     #if jsviews_enable_jqhx
     @:overload(function (to: JqHtml, from: {}, ?context: {}): Dynamic{})
     #end
@@ -129,8 +133,8 @@ typedef ArrayObservable = {>Observable,
 
 
 typedef ObservableEvent = {
-    var target(default, never): { }; // Object or Array<Dynamic>
-    var data(default, never): { };   // JsViews metadata
+    var target(default, never): {}; // Object or Array<Dynamic>
+    var data(default, never): {};   // JsViews metadata
 }
 
 typedef ObservableEventArgs = {
