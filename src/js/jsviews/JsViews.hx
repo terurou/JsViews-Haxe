@@ -8,6 +8,7 @@ import js.html.Element;
 #if jsviews_enable_jqhx
 import js.jqhx.JqHtml;
 #end
+import haxe.ds.Option;
 
 @:native("$")
 extern class JsViews {
@@ -32,6 +33,11 @@ extern class JsViews {
     @:overload(function (namedTemplates: {}, ?parentTemplate: String): Void{})
     static inline function template(name: String, markupOrSelector: String): Template {
         return untyped __js__("$.templates")(name, markupOrSelector);
+    }
+
+    static inline function getTemplate(name: String): Option<Template> {
+        var t = untyped __js__("$.templates")[name];
+        return (t != null) ? Some(t) : None;
     }
 
     @:overload(function (flag: Bool, to: Element, from: {}, ?context: {}): Void{})
