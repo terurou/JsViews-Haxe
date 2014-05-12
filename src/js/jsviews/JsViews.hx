@@ -76,13 +76,13 @@ extern class JsViews {
         return untyped __js__("$").observable(array);
     }
 
-    @:overload(function (object: {}, ?path: String, myHandler: ObservableEvent -> ObservableEventArgs -> Void): {}{})
-    static function observe(array: Array<Dynamic>, myHandler: ObservableEvent -> ObservableEventArgs -> Void) : {};
+    @:overload(function (object: {}, ?path: String, myHandler: ObservableEvent -> ObservableEventArgs -> Void): Void{})
+    static function observe(array: Array<Dynamic>, myHandler: ObservableEvent -> ObservableEventArgs -> Void) : Void;
 
     @:overload(function (array: Array<Dynamic>): {}{})
     @:overload(function (object: {}): {}{})
-    @:overload(function (object: {}, ?path: String, myHandler: ObservableEvent -> ObservableEventArgs -> Void): {}{})
-    static function unobserve(array: Array<Dynamic>, myHandler: ObservableEvent -> ObservableEventArgs -> Void): {};
+    @:overload(function (object: {}, ?path: String, myHandler: ObservableEvent -> ObservableEventArgs -> Void): Void{})
+    static function unobserve(array: Array<Dynamic>, myHandler: ObservableEvent -> ObservableEventArgs -> Void): Void;
 }
 
 typedef TemplateOptions = {
@@ -154,7 +154,7 @@ typedef ObservableArray = {>Observable,
 
 typedef ObservableEvent = {
     var target(default, never): {}; // Object or Array<Dynamic>
-    var data(default, never): {};   // JsViews metadata
+    var data(default, never): Dynamic<Dynamic>; // JsViews metadata
 }
 
 typedef ObservableEventArgs = {
