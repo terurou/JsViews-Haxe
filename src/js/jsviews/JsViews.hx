@@ -68,11 +68,11 @@ extern class JsViews {
     static function observable(array: Array<Dynamic>) : ArrayObservable;
 
     @:overload(function (object: Dynamic<Dynamic>): ObjectObservable{})
-    static inline function observableObject(object: {}): ObjectObservable {
+    static inline function objectObservable(object: {}): ObjectObservable {
         return untyped __js__("$").observable(object);
     }
 
-    static inline function observableArray(array: Array<Dynamic>): ArrayObservable {
+    static inline function arrayObservable(array: Array<Dynamic>): ArrayObservable {
         return untyped __js__("$").observable(array);
     }
 
