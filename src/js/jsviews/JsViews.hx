@@ -114,7 +114,7 @@ typedef TagCtx = {
     var markup(default, never): String;
     var args(default, never): Array<Dynamic>;
     var params(default, never): String;
-    var props(default, never): Dynamic;
+    var props(default, never): JsObject;
     var content(default, never): Template;
     var views(default, never): Dynamic;
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
@@ -123,7 +123,7 @@ typedef TagCtx = {
 typedef ConverterCtx = {
     var args(default, never): Array<Dynamic>;
     var params(default, never): String;
-    var props(default, never): Dynamic;
+    var props(default, never): JsObject;
     var views(default, never): Dynamic;
 }
 
