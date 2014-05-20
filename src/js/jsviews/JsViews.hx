@@ -63,12 +63,11 @@ extern class JsViews {
     @:overload(function (): Void{})
     static function unlink(flag: Bool, to: String) : Void;
 
-    @:overload(function (object: Dynamic<Dynamic>): ObjectObservable{})
+    @:overload(function (object: JsObject): ObjectObservable{})
     @:overload(function (object: {}): ObjectObservable{})
     static function observable(array: Array<Dynamic>) : ArrayObservable;
 
-    @:overload(function (object: Dynamic<Dynamic>): ObjectObservable{})
-    static inline function objectObservable(object: {}): ObjectObservable {
+    static inline function objectObservable(object: JsObject): ObjectObservable {
         return untyped __js__("$").observable(object);
     }
 
@@ -98,11 +97,11 @@ typedef Template = {
 
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
 
-    @:overload(function (to: Element, from: {}, ?context: {}): Void{})
+    @:overload(function (to: Element, from: JsObject, ?context: {}): Void{})
     #if jsviews_enable_jqhx
-    @:overload(function (to: JqHtml, from: {}, ?context: {}): Void{})
+    @:overload(function (to: JqHtml, from: JsObject, ?context: {}): Void{})
     #end
-    function link(to: String, from: {}, ?context: {}): Void;
+    function link(to: String, from: JsObject, ?context: {}): Void;
 
     @:overload(function (to: Element): Void{})
     #if jsviews_enable_jqhx
@@ -134,9 +133,9 @@ private typedef Observable = {
 }
 
 typedef ObjectObservable = {>Observable,
-    @:overload(function (newValues: Dynamic<Dynamic>): Template{})
+    @:overload(function (newValues: JsObject): Template{})
     function setProperty(path: String, value: Dynamic): ObjectObservable;
-    function get(): Dynamic<Dynamic>;
+    function data(): JsObject;
 }
 
 typedef ArrayObservable = {>Observable,
@@ -148,7 +147,7 @@ typedef ArrayObservable = {>Observable,
 
     function refresh(index: Int): ArrayObservable;
 
-    function get(): Array<Dynamic>;
+    function data(): Array<Dynamic>;
 }
 
 
@@ -214,4 +213,25 @@ enum EnumedObservableEventArgs {
     Remove(index: Int, numToRemove: Int);
     Move(oldIndex: Int, index: Int, items: Array<Dynamic>);
     Refresh(oldItem: Dynamic);
+}
+
+abstract JsObject(Dynamic<Dynamic>) from Dynamic<Dynamic> to Dynamic<Dynamic> {
+    inline function new(a: Dynamic<Dynamic>)
+        this = a;
+
+    @:from static public inline function fromObject(obj: {}) {
+        return new JsObject(cast obj);
+    }
+
+    @:to inline function toObject<T: {}>(): T {
+        return cast this;
+    }
+
+    @:arrayAccess public inline function arrayGet(key: String): Null<Dynamic> {
+        return untyped this[key];
+    }
+
+    @:arrayAccess public inline function arraySet(key:String, value: Dynamic): Dynamic {
+        return untyped this[key] = value;
+    }
 }
