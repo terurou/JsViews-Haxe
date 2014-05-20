@@ -153,7 +153,7 @@ typedef ArrayObservable = {>Observable,
 
 
 typedef ObservableEvent = {
-    var target(default, never): {}; // Object or Array<Dynamic>
+    var target(default, never): Dynamic; // Object or Array<Dynamic>
     var data(default, never): Dynamic<Dynamic>; // JsViews metadata
 }
 
@@ -170,30 +170,27 @@ typedef ObservableEventArgs = {
     var oldItem(default, never): Null<Dynamic>;       // array / refresh
 }
 
-// FIXME Rewrites with @:enum abstract (>= Haxe 3.2)
-// http://nadako.tumblr.com/post/64707798715/cool-feature-of-upcoming-haxe-3-2-enum-abstracts
-@:fakeEnum(String)
-extern enum ObservableEventType {
-    set;
-    insert;
-    remove;
-    move;
-    refresh;
+@:enum abstract ObservableEventType(String) {
+    var Set = "set";
+    var Insert = "insert";
+    var Remove = "remove";
+    var Move = "move";
+    var Refresh = "refresh";
 }
 
 
 class JsViewsTools {
     public static inline function toEnum(ea: ObservableEventArgs): EnumedObservableEventArgs {
         return switch (ea.change) {
-            case set:
+            case Set:
                 Set(ea.path, ea.value, ea.oldValue);
-            case insert:
+            case Insert:
                 Insert(ea.index, ea.items);
-            case remove:
+            case Remove:
                 Remove(ea.index, ea.numToRemove);
-            case move:
+            case Move:
                 Move(ea.oldIndex, ea.index, ea.items);
-            case refresh:
+            case Refresh:
                 Refresh(ea.oldItem);
         }
     }
