@@ -63,16 +63,16 @@ extern class JsViews {
     @:overload(function (): Void{})
     static function unlink(flag: Bool, to: String) : Void;
 
-    @:overload(function (object: Dynamic<Dynamic>): ObservableObject{})
-    @:overload(function (object: {}): ObservableObject{})
-    static function observable(array: Array<Dynamic>) : ObservableArray;
+    @:overload(function (object: Dynamic<Dynamic>): ObjectObservable{})
+    @:overload(function (object: {}): ObjectObservable{})
+    static function observable(array: Array<Dynamic>) : ArrayObservable;
 
-    @:overload(function (object: Dynamic<Dynamic>): ObservableObject{})
-    static inline function observableObject(object: {}): ObservableObject {
+    @:overload(function (object: Dynamic<Dynamic>): ObjectObservable{})
+    static inline function observableObject(object: {}): ObjectObservable {
         return untyped __js__("$").observable(object);
     }
 
-    static inline function observableArray(array: Array<Dynamic>): ObservableArray {
+    static inline function observableArray(array: Array<Dynamic>): ArrayObservable {
         return untyped __js__("$").observable(array);
     }
 
@@ -133,20 +133,20 @@ private typedef Observable = {
     function unobserveAll(myHandler: ObservableEvent -> ObservableEventArgs -> Void): Void;
 }
 
-typedef ObservableObject = {>Observable,
+typedef ObjectObservable = {>Observable,
     @:overload(function (newValues: Dynamic<Dynamic>): Template{})
-    function setProperty(path: String, value: Dynamic): ObservableObject;
+    function setProperty(path: String, value: Dynamic): ObjectObservable;
     function get(): Dynamic<Dynamic>;
 }
 
-typedef ObservableArray = {>Observable,
-    function insert(?index: Int, insertedItems: Dynamic): ObservableArray;
+typedef ArrayObservable = {>Observable,
+    function insert(?index: Int, insertedItems: Dynamic): ArrayObservable;
 
-    function remove(index: Int, ?numToRemove: Int): ObservableArray;
+    function remove(index: Int, ?numToRemove: Int): ArrayObservable;
 
-    function move(oldIndex: Int, newIndex: Int, ?numToMove: Int): ObservableArray;
+    function move(oldIndex: Int, newIndex: Int, ?numToMove: Int): ArrayObservable;
 
-    function refresh(index: Int): ObservableArray;
+    function refresh(index: Int): ArrayObservable;
 
     function get(): Array<Dynamic>;
 }
