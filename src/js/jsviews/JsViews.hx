@@ -12,14 +12,15 @@ import haxe.ds.Option;
 
 @:native("$")
 extern class JsViews {
-    static var templates(default, never): Dynamic<Template>;
+    static var templates(default, never): JsObject<Template>;
 
-    static var render(default, never): Dynamic<{} -> String>;
+    static var render(default, never): JsObject<{} -> String>;
 
     static var views: {
         @:overload(function (namedConverters: {}, ?parentTemplate: String): Void{})
         function converters(name: String, fn: Dynamic -> String): Void;
 
+        @:overload(function (name: String, tagOptions: TagOptions): Void{})
         @:overload(function (namedTags: {}, ?parentTemplate: String): Void{})
         function tags(name: String, fn: Dynamic -> String): Void;
 
@@ -63,11 +64,11 @@ extern class JsViews {
     @:overload(function (): Void{})
     static function unlink(flag: Bool, to: String) : Void;
 
-    @:overload(function (object: JsObject): ObjectObservable{})
+    @:overload(function (object: JsObject<Dynamic>): ObjectObservable{})
     @:overload(function (object: {}): ObjectObservable{})
     static function observable(array: Array<Dynamic>) : ArrayObservable;
 
-    static inline function objectObservable(object: JsObject): ObjectObservable {
+    static inline function objectObservable(object: JsObject<Dynamic>): ObjectObservable {
         return untyped __js__("$").observable(object);
     }
 
@@ -84,6 +85,17 @@ extern class JsViews {
     static function unobserve(array: Array<Dynamic>, myHandler: ObservableEvent -> ObservableEventArgs -> Void): Void;
 }
 
+typedef TagOptions = {
+    ?render: Dynamic -> String,
+    ?template: String,
+    ?init: TagCtx -> Dynamic -> Void,
+    ?onBeforeLink: Void -> Bool,
+    ?onAfterLink: TagCtx -> Dynamic -> Void,
+    ?onUpdate: ObservableEvent -> ObservableEventArgs -> TagCtx -> Void,
+    ?onBeforeChange: ObservableEvent -> ObservableEventArgs -> Bool,
+    ?onDispose: Void -> Void
+}
+
 typedef TemplateOptions = {
     markup: String,
     ?converters: {},
@@ -91,17 +103,16 @@ typedef TemplateOptions = {
     ?tags: {}
 }
 
-
 typedef Template = {
     var markup(default, never): String;
 
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
 
-    @:overload(function (to: Element, from: JsObject, ?context: {}): Void{})
+    @:overload(function (to: Element, from: JsObject<Dynamic>, ?context: {}): Void{})
     #if jsviews_enable_jqhx
-    @:overload(function (to: JqHtml, from: JsObject, ?context: {}): Void{})
+    @:overload(function (to: JqHtml, from: JsObject<Dynamic>, ?context: {}): Void{})
     #end
-    function link(to: String, from: JsObject, ?context: {}): Void;
+    function link(to: String, from: JsObject<Dynamic>, ?context: {}): Void;
 
     @:overload(function (to: Element): Void{})
     #if jsviews_enable_jqhx
@@ -114,7 +125,7 @@ typedef TagCtx = {
     var markup(default, never): String;
     var args(default, never): Array<Dynamic>;
     var params(default, never): String;
-    var props(default, never): JsObject;
+    var props(default, never): JsObject<Dynamic>;
     var content(default, never): Template;
     var views(default, never): Dynamic;
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
@@ -123,7 +134,7 @@ typedef TagCtx = {
 typedef ConverterCtx = {
     var args(default, never): Array<Dynamic>;
     var params(default, never): String;
-    var props(default, never): JsObject;
+    var props(default, never): JsObject<Dynamic>;
     var views(default, never): Dynamic;
 }
 
@@ -133,9 +144,9 @@ private typedef Observable = {
 }
 
 typedef ObjectObservable = {>Observable,
-    @:overload(function (newValues: JsObject): Template{})
+    @:overload(function (newValues: JsObject<Dynamic>): Template{})
     function setProperty(path: String, value: Dynamic): ObjectObservable;
-    function data(): JsObject;
+    function data(): JsObject<Dynamic>;
 }
 
 typedef ArrayObservable = {>Observable,
@@ -215,8 +226,8 @@ enum EnumedObservableEventArgs {
     Refresh(oldItem: Dynamic);
 }
 
-abstract JsObject(Dynamic<Dynamic>) from Dynamic<Dynamic> to Dynamic<Dynamic> {
-    inline function new(a: Dynamic<Dynamic>)
+abstract JsObject<A>(Dynamic<A>) from Dynamic<A> to Dynamic<A> {
+    inline function new(a: Dynamic<A>)
         this = a;
 
     @:from static public inline function fromObject(obj: {}) {
