@@ -88,6 +88,8 @@ extern class JsViews {
 typedef TagOptions = {
     ?render: Dynamic -> String,
     ?template: String,
+    ?dataBoundOnly: Bool,
+    ?autoBind: Bool, // On the opening tag with no args, if autoBind is true, bind the the current data context
     ?init: TagCtx -> Dynamic -> Void,
     ?onBeforeLink: Void -> Bool,
     ?onAfterLink: TagCtx -> Dynamic -> Void,
