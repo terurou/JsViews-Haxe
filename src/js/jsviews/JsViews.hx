@@ -33,7 +33,7 @@ extern class JsViews {
     @:overload(function (name: String, templateOptions: TemplateOptions): Template{})
     @:overload(function (namedTemplates: {}, ?parentTemplate: String): Void{})
     static inline function template(name: String, markupOrSelector: String): Template {
-        return untyped __js__("$.templates")(name, markupOrSelector);
+        return untyped __js__("$.templates.apply")(null, (markupOrSelector == null) ? [name] : [name, markupOrSelector]);
     }
 
     static inline function getTemplate(name: String): Option<Template> {
