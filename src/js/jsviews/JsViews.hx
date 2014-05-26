@@ -123,6 +123,12 @@ typedef Template = {
     function unlink(to: String): Void;
 }
 
+typedef Tag = {
+    var tagCtx(default, never): TagCtx;
+    var parentElem(default, never): Element;
+    function contents(selector: String): #if jsviews_enable_jqhx JqHtml #else ArrayAccess<Element>#end;
+}
+
 typedef TagCtx = {
     var markup(default, never): String;
     var args(default, never): Array<Dynamic>;
@@ -211,9 +217,13 @@ class JsViewsTools {
         return untyped __js__("Array.prototype.slice.call(arguments)");
     }
 
-    public static inline function tagCtx(): TagCtx {
-        return untyped __js__("this.tagCtx");
+    public static inline function tag(): Tag {
+        return untyped __js__("this");
     }
+
+    //public static inline function tagCtx(): TagCtx {
+        //return untyped __js__("this.tagCtx");
+    //}
 
     public static inline function converterCtx(): TagCtx {
         return untyped __js__("this.tagCtx");
