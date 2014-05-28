@@ -164,7 +164,7 @@ typedef ArrayObservable = {>Observable,
 
     function move(oldIndex: Int, newIndex: Int, ?numToMove: Int): ArrayObservable;
 
-    function refresh(index: Int): ArrayObservable;
+    function refresh(newItems: Array<Dynamic>): ArrayObservable;
 
     function data(): Array<Dynamic>;
 }
