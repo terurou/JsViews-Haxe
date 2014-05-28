@@ -158,7 +158,8 @@ typedef ObjectObservable = {>Observable,
 }
 
 typedef ArrayObservable = {>Observable,
-    function insert(?index: Int, insertedItems: Dynamic): ArrayObservable;
+    @:overload(function (newItem: Dynamic): Template{})
+    function insert(index: Int, newItem: Dynamic): ArrayObservable;
 
     function remove(index: Int, ?numToRemove: Int): ArrayObservable;
 
