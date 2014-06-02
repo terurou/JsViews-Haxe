@@ -17,8 +17,8 @@ extern class JsViews {
     static var render(default, never): JsObject<{} -> String>;
 
     static var views: {
-        @:overload(function (namedConverters: {}, ?parentTemplate: String): Void{})
-        function converters(name: String, fn: Dynamic -> String): Void;
+        @:overload(function (namedConverters: JsObject<Dynamic -> Dynamic>, ?parentTemplate: String): Void{})
+        function converters(name: String, fn: Dynamic -> Dynamic): Dynamic;
 
         @:overload(function (name: String, tagOptions: TagOptions): Void{})
         @:overload(function (namedTags: {}, ?parentTemplate: String): Void{})
