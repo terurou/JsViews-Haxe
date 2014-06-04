@@ -90,6 +90,7 @@ typedef TagOptions = {
     ?template: String,
     ?dataBoundOnly: Bool,
     ?autoBind: Bool, // On the opening tag with no args, if autoBind is true, bind the the current data context
+    ?flow: Bool,
     ?init: TagCtx -> Dynamic -> Void,
     ?onBeforeLink: Void -> Bool,
     ?onAfterLink: TagCtx -> Dynamic -> Void,
