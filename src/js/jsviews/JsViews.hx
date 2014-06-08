@@ -25,7 +25,7 @@ extern class JsViews {
         function tags(name: String, fn: Dynamic -> String): Void;
 
         @:overload(function (namedHelpers: {}, ?parentTemplate: String): Void{})
-        function helpers(name: String, fn: Dynamic -> String): Void;
+        function helpers(name: String, fn: Dynamic -> Dynamic): Void;
     };
 
     @:overload(function (markupOrSelector: String): Template{})
