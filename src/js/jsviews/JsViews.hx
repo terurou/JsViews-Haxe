@@ -124,21 +124,32 @@ typedef Template = {
     function unlink(to: String): Void;
 }
 
-typedef Tag = {
-    var tagCtx(default, never): TagCtx;
-    var parentElem(default, never): Element;
-    function contents(selector: String): #if jsviews_enable_jqhx JqHtml #else ArrayAccess<Element>#end;
-}
-
 typedef TagCtx = {
-    var markup(default, never): String;
     var args(default, never): Array<Dynamic>;
+    var content(default, never): Template;
+    var ctx(default, never): Dynamic;
+    var index(default, never): Int;
+    var markup(default, never): String;
     var params(default, never): String;
     var props(default, never): JsObject<Dynamic>;
-    var content(default, never): Template;
-    var views(default, never): Dynamic;
     function render(?data: {}, ?helpersOrContext: Dynamic): String;
+    var tag(default, never): TagDef;
+    var tmpl(default, never): Dynamic;
+    var views(default, never): Dynamic;
 }
+
+typedef TagDef = {
+    var _(default, never): Dynamic<Dynamic>;
+    function contents(selector: String): #if jsviews_enable_jqhx JqHtml #else ArrayAccess<Element>#end;
+    var ctx(default, never): Dynamic;
+    var linkCtx(default, never): Dynamic;
+    var parentElem(default, never): Element;
+    function refresh(sourceValue: Dynamic): Void;
+    var tagCtx(default, never): TagCtx;
+    var tagName(default, never): String;
+    function update(value: Dynamic): Void;
+}
+
 
 typedef ConverterCtx = {
     var args(default, never): Array<Dynamic>;
@@ -219,16 +230,8 @@ class JsViewsTools {
         return untyped __js__("Array.prototype.slice.call(arguments)");
     }
 
-    public static inline function tag(): Tag {
+    public static inline function tagDef(): TagDef {
         return untyped __js__("this");
-    }
-
-    //public static inline function tagCtx(): TagCtx {
-        //return untyped __js__("this.tagCtx");
-    //}
-
-    public static inline function converterCtx(): TagCtx {
-        return untyped __js__("this.tagCtx");
     }
 }
 
