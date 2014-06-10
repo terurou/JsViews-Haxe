@@ -143,8 +143,9 @@ typedef TagDef = {
     function contents(selector: String): #if jsviews_enable_jqhx JqHtml #else ArrayAccess<Element>#end;
     var ctx(default, never): Dynamic;
     var linkCtx(default, never): Dynamic;
+    var linkedElem(default, default): Null<Dynamic>;
     var parentElem(default, never): Element;
-    function refresh(sourceValue: Dynamic): Void;
+    function refresh(?sourceValue: Dynamic): Void;
     var tagCtx(default, never): TagCtx;
     var tagName(default, never): String;
     function update(value: Dynamic): Void;
