@@ -14,7 +14,7 @@ import haxe.ds.Option;
 extern class JsViews {
     static var templates(default, never): JsObject<Template>;
 
-    static var render(default, never): JsObject<{} -> String>;
+    //static var render(default, never): JsObject<{} -> String>;
 
     static var views: {
         @:overload(function (namedConverters: JsObject<Dynamic -> Dynamic>, ?parentTemplate: String): Void{})
@@ -106,10 +106,10 @@ typedef TemplateOptions = {
     ?tags: {}
 }
 
-typedef Template = {
+extern class Template {
     var markup(default, never): String;
 
-    function render(?data: {}, ?helpersOrContext: Dynamic): String;
+    function render(?data: {}, ?helpers: JsObject<Dynamic -> Dynamic>, ?noIteration: Bool): String;
 
     @:overload(function (to: Element, from: JsObject<Dynamic>, ?context: {}): Void{})
     #if jsviews_enable_jqhx
@@ -124,7 +124,7 @@ typedef Template = {
     function unlink(to: String): Void;
 }
 
-typedef TagCtx = {
+extern class TagCtx {
     var args(default, never): Array<Dynamic>;
     var content(default, never): Template;
     var ctx(default, never): Dynamic;
@@ -132,13 +132,13 @@ typedef TagCtx = {
     var markup(default, never): String;
     var params(default, never): String;
     var props(default, never): JsObject<Dynamic>;
-    function render(?data: {}, ?helpersOrContext: Dynamic): String;
+    function render(?data: {}, ?helpers: JsObject<Dynamic -> Dynamic>, ?noIteration: Bool): String;
     var tag(default, never): TagDef;
     var tmpl(default, never): Dynamic;
     var views(default, never): Dynamic;
 }
 
-typedef TagDef = {
+extern class TagDef {
     var _(default, never): Dynamic<Dynamic>;
     function contents(selector: String): #if jsviews_enable_jqhx JqHtml #else ArrayAccess<Element>#end;
     var ctx(default, never): Dynamic;
